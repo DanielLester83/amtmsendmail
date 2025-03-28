@@ -10,5 +10,5 @@ Via command line or ssh run \jffs\amtmsendmail "MESSAGE BODY" "EMAIL FROM HEADER
 
 Vorta Example: 
 While this can be used in many ways,
-I built so that Vorta (The Borg Backup GUI) can run this shell command after a successful backup
-<code> /jffs/amtmsendmail "repo: $repo_url\nslug: $profile_slug\nreturncode: $returncode" "Vorta - PC Backup" "$profile_name - Backup Complete" </code>
+I built so that Vorta (The Borg Backup GUI) can run this shell command after a successful backup (return code 0)
+<code> ssh Router@192.168.1.1 /jffs/amtmsendmail "\"Repo - $(echo $repo_url | tr ':' ' ')$(echo "\r")Profile Slug - $(echo $profile_slug | tr ':' ' ')$(echo "\r")Return Code - $(echo $returncode | tr ':' ' ')\" \"Vorta PC Backup\" \"\"$(echo $profile_name | tr ':' ' ')\" Backup Complete\""</code>
