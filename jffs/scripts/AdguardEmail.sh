@@ -1,6 +1,6 @@
 #! /bin/sh
 echo "Require package jo . Install with: opkg install jo"
-echo 'Schedule with cron . Install with: cru a AdguardEmail "0 23 * * * sh /jffs/scripts/AdguardEmail.sh"'
+echo 'Schedule with cron . Install with: cru a AdguardEmail "59 23 * * * sh /jffs/scripts/AdguardEmail.sh"'
 
 d=$(date +%Y-%m-%dT)
 echo ${d}
