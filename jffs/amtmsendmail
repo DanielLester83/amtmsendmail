@@ -1,8 +1,13 @@
 echo "Subject: $3" > /tmp/divmail-body
+
 echo "From: $2" >> /tmp/divmail-body
+
 echo "Date: $(date -R)" >> /tmp/divmail-body
-echo "$(echo $1 | tr \":\" \"&#58;\")" >> /tmp/divmail-body
+
+echo $1 | sed -e "s/:/(COLON)/g" >> /tmp/divmail-body
 
 . /jffs/addons/amtm/mail/email.conf
+
 EMAIL_DIR=/jffs/addons/amtm/mail
+
 /usr/sbin/curl $verbose --url $PROTOCOL://$SMTP:$PORT --mail-from "$FROM_ADDRESS" --mail-rcpt "$TO_ADDRESS" --upload-file /tmp/divmail-body --ssl-reqd --user "$USERNAME:$(/usr/sbin/openssl aes-256-cbc $emailPwEnc -d -in "${EMAIL_DIR}/emailpw.enc" -pass pass:ditbabot,isoi)" $SSL_FLAG
