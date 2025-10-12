@@ -1,7 +1,7 @@
-echo "Subject: $3" >/tmp/divmail-body
-echo "From: $2" >>/tmp/divmail-body
-echo "Date: $(date -R)" >>/tmp/divmail-body
-echo "$1" >>/tmp/divmail-body
+echo "Subject: $3" > /tmp/divmail-body
+echo "From: $2" >> /tmp/divmail-body
+echo "Date: $(date -R)" >> /tmp/divmail-body
+echo "$(echo $1 | tr \":\" \"&#58;\")" >> /tmp/divmail-body
 
 . /jffs/addons/amtm/mail/email.conf
 EMAIL_DIR=/jffs/addons/amtm/mail
