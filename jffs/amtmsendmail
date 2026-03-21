@@ -1,13 +1,29 @@
-echo "Subject: $3" > /tmp/divmail-body
+# amtmsendmail
+#
+# https://github.com/DanielLester83/amtmsendmail/tree/main
+#
+# Send an email using your Asus-Merlin Routers settings via command line
+#
+# Installation: copy the file to your routers \jffs folder run chmod +x \jffs\amtmsendmail
+#
+# Usage: Via command line or ssh run \jffs\amtmsendmail "MESSAGE BODY" "EMAIL FROM HEADER" "EMAIL SUBJECT HEADER"
+#
 
-echo "From: $2" >> /tmp/divmail-body
+# Uncomment this for verbose output
+#verbose=-v
 
-echo "Date: $(date -R)" >> /tmp/divmail-body
-
-echo $1 | sed -e "s/:/(COLON)/g" >> /tmp/divmail-body
-
-. /jffs/addons/amtm/mail/email.conf
-
+TMP_FILE=/tmp/divmail-body
 EMAIL_DIR=/jffs/addons/amtm/mail
+. ${EMAIL_DIR}/email.conf
 
-/usr/sbin/curl $verbose --url $PROTOCOL://$SMTP:$PORT --mail-from "$FROM_ADDRESS" --mail-rcpt "$TO_ADDRESS" --upload-file /tmp/divmail-body --ssl-reqd --user "$USERNAME:$(/usr/sbin/openssl aes-256-cbc $emailPwEnc -d -in "${EMAIL_DIR}/emailpw.enc" -pass pass:ditbabot,isoi)" $SSL_FLAG
+echo -e "Subject: ${3}\r" > $TMP_FILE
+echo -e "From: $2 <${FROM_ADDRESS}>\r" >> $TMP_FILE
+echo -e "To: \"${TO_NAME}\" <${TO_ADDRESS}>\r" >> $TMP_FILE
+echo -e "Date: $(date -R)\r" >> $TMP_FILE
+
+echo -e "$1\r" | sed -e "s/:/(COLON)/g" >> $TMP_FILE
+
+
+/usr/sbin/curl $verbose --url $PROTOCOL://$SMTP:$PORT --mail-from "$FROM_ADDRESS" --mail-rcpt "$TO_ADDRESS" --upload-file $TMP_FILE --ssl-reqd --user "$USERNAME:$(/usr/sbin/openssl aes-256-cbc $emailPwEnc -d -in "${EMAIL_DIR}/emailpw.enc" -pass pass:ditbabot,isoi)" $SSL_FLAG
+
+rm $TMP_FILE
